@@ -25,6 +25,7 @@ class Author(models.Model):
         books_str = ", ".join(book_names)
         return books_str
 
+
     display_books.short_description = 'Knygos'
 
 class Book(models.Model):
