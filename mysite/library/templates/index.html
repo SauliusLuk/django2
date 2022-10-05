@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Sveiki atvyke{% endblock %}
+
+{% block content %}
+<b>Local library</b>
+<p>We have the following books:</p>
+<ul>
+    <li><strong>Books:</strong> {{ num_book }}</li>
+    <li><strong>Instances:</strong> {{ num_instances }}</li>
+    <li><strong>Instances available:</strong> {{ num_instances_available }}</li>
+    <li><strong>Authors:</strong> {{ num_authors }}</li>
+</ul>
+{% endblock %}
