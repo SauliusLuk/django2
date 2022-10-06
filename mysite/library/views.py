@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Book, BookInstance, Author
+from django.views import generic
+
 
 
 # Create your views here.
@@ -23,3 +25,27 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
+
+
+def authors(request):
+    context = {
+        'authors': Author.objects.all()
+    }
+    print(authors)
+    return render(request, 'authors.html', context=context)
+
+def author(request, author_id): # author_id paimamamas is urls.py
+    context = {
+            'single_author': get_object_or_404(Author, pk=author_id),
+    }
+    return render(request, 'author.html', context=context)
+
+class BookListView(generic.ListView):
+    model = Book
+    template_name = 'books.html'
+    context_object_name = 'books'
+
+class BookDetailView(generic.DetailView):
+    model = Book
+    template_name = 'book.html'
+    context_object_name = 'book'

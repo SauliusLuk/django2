@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Autorius{% endblock %}
+
+{% block content %}
+<h1>Knyga</h1>
+<p>Pavadinimas: <strong>{{ book.title }}</strong></p>
+<p>Autorius: <strong>{{ book.author }}</strong></p>
+<p>ISBN: <strong>{{ book.isbn }}</strong></p>
+<p>Zanras: <strong>{{ book.display_genre }}</strong></p>
+<p>Aprasymas: <strong>{{ book.summary }}</strong></p>
+<h5>Knygos egzemplioriai:</h5>
+<ul>
+    {% for instance in book.instances.all %}
+          <li><p class="{% if instance.status == 'g' %}text-success{% elif instance.status == 'p' %}text-danger{% else %}text-warning{% endif %}">
+    {{ instance.uuid }}, {{ instance.get_status_display }} ({{ instance.due_back }})</li>
+    {% endfor %}
+</ul>
+{% endblock %}

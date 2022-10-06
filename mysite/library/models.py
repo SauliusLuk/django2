@@ -15,6 +15,7 @@ class Genre(models.Model):
 class Author(models.Model):
     first_name = models.CharField("Vardas", max_length=100)
     last_name = models.CharField("Pavarde", max_length=100)
+    description = models.TextField('Aprašymas', max_length=2000, default='')
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -49,7 +50,7 @@ class Book(models.Model):
 
 class BookInstance(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unikalus ID knygos kopijai')
-    book = models.ForeignKey("Book", on_delete=models.CASCADE)
+    book = models.ForeignKey("Book", on_delete=models.CASCADE, related_name='instances')
     due_back = models.DateField("Bus prieinama", blank=True)
 
     def __str__(self):

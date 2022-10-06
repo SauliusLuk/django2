@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Autoriai{% endblock %}
+
+{% block content %}
+<h1>Knygos</h1>
+<p>Mūsų knygų sąrašas.</p>
+<ul>
+    {% for book in books %}
+    <li><a href="{% url 'book' book.id %}">{{ book }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
