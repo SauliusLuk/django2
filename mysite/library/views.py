@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Book, BookInstance, Author
 from django.views import generic
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 
@@ -28,10 +30,12 @@ def index(request):
 
 
 def authors(request):
+    paginator = Paginator(Author.objects.all(), 3)
+    page_number = request.GET.get('page')
+    paged_authors = paginator.get_page(page_number)
     context = {
-        'authors': Author.objects.all()
+        'authors': paged_authors,
     }
-    print(authors)
     return render(request, 'authors.html', context=context)
 
 def author(request, author_id): # author_id paimamamas is urls.py
@@ -40,10 +44,20 @@ def author(request, author_id): # author_id paimamamas is urls.py
     }
     return render(request, 'author.html', context=context)
 
+def search(request):
+    query = request.GET.get('query')
+    search_results = Book.objects.filter(Q(title__icontains=query) | Q(summary__icontains=query))
+    context = {
+        'books': search_results,
+        'query': query,
+    }
+    return render(request, 'search.html', context=context)
+
 class BookListView(generic.ListView):
     model = Book
     template_name = 'books.html'
     context_object_name = 'books'
+    paginate_by = 4
 
 class BookDetailView(generic.DetailView):
     model = Book
