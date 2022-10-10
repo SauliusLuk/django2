@@ -3,14 +3,34 @@
 {% block title %}Autoriai{% endblock %}
 
 {% block content %}
+{% load static %}
+
 <h1>Knygos</h1>
 <p>Mūsų knygų sąrašas.</p>
-<ul>
+
+{% if books %}
+    <div class="row">
     {% for book in books %}
-    <li><a href="{% url 'book' book.id %}">{{ book }}</a></li>
-    {% endfor %}
-</ul>
-  <div class="pagination">
+        <div class="col-md-4 d-flex align-items-stretch">
+            <div class="card mb-4 shadow-sm">
+                {% if book.cover %}
+                <img src="{{ book.cover.url }}" class="card-img-top" style="width:200px" alt="...">
+                {% else %}
+                <img src="{% static 'img/no-image.png' %}" style="width:200px" class="card-img-top" alt="...">
+                {% endif %}
+                <div class="card-body">
+                   <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                    <p class="card-text"></p> <a href="{{ book.pk }}"> {{ book }}</a></p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+<p>Bibliotekoje knygų nėra.</p>
+            {% endif %}
+
+        </div>
+<div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
             <a href="?page=1">&laquo; pirmas</a>

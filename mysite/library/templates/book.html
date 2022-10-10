@@ -3,6 +3,12 @@
 {% block title %}Autorius{% endblock %}
 
 {% block content %}
+{% load static %}
+{% if book.cover %}
+<img src="{{ book.cover.url }}" class="card-img-top" style="width:200px" alt="...">
+{% else %}
+<img src="{% static 'img/no-image.png' %}" class="card-img-top" style="width:200px" alt="...">
+{% endif %}
 <h1>Knyga</h1>
 <p>Pavadinimas: <strong>{{ book.title }}</strong></p>
 <p>Autorius: <strong>{{ book.author }}</strong></p>
