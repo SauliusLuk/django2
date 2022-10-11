@@ -1,5 +1,8 @@
 from django.db import models
 import uuid
+from django.contrib.auth.models import User
+from datetime import date
+
 
 # Create your models here.
 class Genre(models.Model):
@@ -11,6 +14,7 @@ class Genre(models.Model):
     class Meta:
         verbose_name = "Žanras"
         verbose_name_plural = "Žanrai"
+
 
 class Author(models.Model):
     first_name = models.CharField("Vardas", max_length=100)
@@ -33,10 +37,12 @@ class Author(models.Model):
 
     display_books.short_description = 'Knygos'
 
+
 class Book(models.Model):
     title = models.CharField("Pavadinimas", max_length=200)
     summary = models.TextField("Aprasymas", max_length=1000, help_text="Trumpas knygos aprasymas")
-    isbn = models.CharField("ISBN", max_length=13, help_text='13 Simbolių <a href="https://www.isbn-international.org/content/what-isbn">ISBN kodas</a>')
+    isbn = models.CharField("ISBN", max_length=13,
+                            help_text='13 Simbolių <a href="https://www.isbn-international.org/content/what-isbn">ISBN kodas</a>')
     author = models.ForeignKey("Author", on_delete=models.SET_NULL, null=True, related_name='books')
     genre = models.ManyToManyField("Genre", help_text='Pasirinkite knygos zanra')
     cover = models.ImageField('Viršelis', upload_to='covers', null=True)
@@ -44,6 +50,7 @@ class Book(models.Model):
     class Meta:
         verbose_name = "Knyga"
         verbose_name_plural = "Knygos"
+        ordering = ['-id']
 
     def __str__(self):
         return f"{self.title}, {self.author}"
@@ -61,13 +68,7 @@ class BookInstance(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unikalus ID knygos kopijai')
     book = models.ForeignKey("Book", on_delete=models.CASCADE, related_name='instances')
     due_back = models.DateField("Bus prieinama", blank=True)
-
-    def __str__(self):
-        return f"{self.book}, {self.uuid}"
-
-    class Meta:
-        verbose_name = "Knygos egzempliorius"
-        verbose_name_plural = "Knygos egzemplioriai"
+    reader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     LOAN_STATUS = (
         ('a', 'Administruojami'),
@@ -79,3 +80,15 @@ class BookInstance(models.Model):
 
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='a', help_text='Statusas')
 
+    def is_overdue(self):
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
+
+    def __str__(self):
+        return f"{self.book}, {self.uuid}"
+
+    class Meta:
+        verbose_name = "Knygos egzempliorius"
+        verbose_name_plural = "Knygos egzemplioriai"
+        ordering = ['-due_back']
