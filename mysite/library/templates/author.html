@@ -6,7 +6,7 @@
 <h1>Autorius</h1>
 <p>Vardas: <strong>{{ single_author.first_name }}</strong></p>
 <p>Pavarde: <strong>{{ single_author.last_name }}</strong></p>
-<p>Aprasymas: {{ single_author.description }}</p>
+<p>Aprasymas: {{ single_author.description | safe }}</p>
 
 <h5>Autoriaus knygos: </h5>
 <ul>

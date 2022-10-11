@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.contrib.auth.models import User
 from datetime import date
+from tinymce.models import HTMLField
 
 
 # Create your models here.
@@ -19,8 +20,8 @@ class Genre(models.Model):
 class Author(models.Model):
     first_name = models.CharField("Vardas", max_length=100)
     last_name = models.CharField("Pavarde", max_length=100)
-    description = models.TextField('Aprašymas', max_length=2000, default='')
-
+    # description = models.TextField('Aprašymas', max_length=2000, default='')
+    description = HTMLField('Aprašymas')
     class Meta:
         verbose_name = "Autorius"
         verbose_name_plural = "Autoriai"
