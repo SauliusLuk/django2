@@ -22,4 +22,17 @@
     {{ instance.uuid }}, {{ instance.get_status_display }} ({{ instance.due_back }})</li>
     {% endfor %}
 </ul>
+
+</br>
+  <h4>Atsiliepimai:</h4>
+  {% if book.reviews.all %}
+    {% for review in book.reviews.all %}
+      <hr>
+      <strong>{{ review.reviewer }}</strong>, <em>{{ review.date_created}}</em>
+      <p>{{ review.content }}</p>
+    {% endfor %}
+  {% else %}
+    <p>Knyga neturi atsiliepimų</p>
+  {% endif %}
+
 {% endblock %}
