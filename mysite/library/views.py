@@ -12,6 +12,7 @@ from django.views.generic.edit import FormMixin
 from . forms import BookReviewForm, UserUpdateForm, ProfileUpdateForm
 
 
+
 # Create your views here.
 
 @csrf_protect
