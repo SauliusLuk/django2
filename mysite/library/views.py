@@ -9,7 +9,7 @@ from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.views.generic.edit import FormMixin
-from . forms import BookReviewForm
+from . forms import BookReviewForm, UserUpdateForm, ProfileUpdateForm
 
 
 # Create your views here.
@@ -99,7 +99,23 @@ def search(request):
 from django.contrib.auth.decorators import login_required
 
 def profile(request):
-    return render(request, 'profile.html')
+    if request.method == "POST":
+        u_form = UserUpdateForm(request.POST, instance=request.user) # Kvieciam UserUpdateForm, paduodam per parametrus request.POST ir nurodom request user (pasiimam atnaujintus duomenis)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid(): # tikrinam ar formos yra valid
+            u_form.save()
+            p_form.save()
+            messages.success(request, f"Profilis atnaujintas")
+            return redirect('profile') # nukreipiam i funkcija ( ne i url)
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+    }
+    return render(request, 'profile.html', context)
 
 
 class BookListView(generic.ListView):
