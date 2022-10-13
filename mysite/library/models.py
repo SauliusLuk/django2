@@ -8,10 +8,10 @@ from PIL import Image
 
 # Create your models here.
 class Genre(models.Model):
-    name = models.CharField(verbose_name="Pavadinimas", max_length=200, help_text="Iveskite knygos zanras")
+    name = models.CharField(verbose_name="Pavadinimas", max_length=200, help_text="Iveskite knygos zanra")
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     class Meta:
         verbose_name = "Žanras"
@@ -42,7 +42,7 @@ class Author(models.Model):
 
 class Book(models.Model):
     title = models.CharField("Pavadinimas", max_length=200)
-    summary = models.TextField("Aprasymas", max_length=1000, help_text="Trumpas knygos aprasymas")
+    summary = models.TextField("Aprašymas", max_length=1000, help_text="Trumpas knygos aprašymas")
     isbn = models.CharField("ISBN", max_length=13,
                             help_text='13 Simbolių <a href="https://www.isbn-international.org/content/what-isbn">ISBN kodas</a>')
     author = models.ForeignKey("Author", on_delete=models.SET_NULL, null=True, related_name='books')
@@ -52,7 +52,7 @@ class Book(models.Model):
     class Meta:
         verbose_name = "Knyga"
         verbose_name_plural = "Knygos"
-        ordering = ['-id']
+        ordering = ['id']
 
     def __str__(self):
         return f"{self.title}, {self.author}"
