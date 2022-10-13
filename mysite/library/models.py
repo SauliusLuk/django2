@@ -101,7 +101,7 @@ class BookReview(models.Model):
     content = models.TextField('Atsiliepimas', max_length=2000)
 
 
-class Profilis(models.Model):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nuotrauka = models.ImageField(default="default.png", upload_to="profile_pics")
 
