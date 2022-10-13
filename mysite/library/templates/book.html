@@ -25,6 +25,21 @@
 
 </br>
   <h4>Atsiliepimai:</h4>
+
+  {% if user.is_authenticated %}
+  <div class="fieldWrapper">
+    <hr><br/>
+    <h4>Palikite atsiliepimą:</h4>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.content }}
+        </br>
+      <input type="submit" value="Pateikti">
+    </form>
+  </div>
+  {% endif %}
+
+
   {% if book.reviews.all %}
     {% for review in book.reviews.all %}
       <hr>
