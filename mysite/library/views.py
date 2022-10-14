@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.views.generic.edit import FormMixin
 from . forms import BookReviewForm, UserUpdateForm, ProfileUpdateForm
+from django.views.generic import ListView
 
 
 
@@ -152,7 +153,7 @@ class BookDetailView(generic.DetailView, FormMixin):
         return super(BookDetailView, self).form_valid(form)
 
 
-class UserBookInstanceListView(generic.ListView, LoginRequiredMixin):
+class UserBookInstanceListView(ListView, LoginRequiredMixin):
     model = BookInstance
     template_name = 'user_books.html'
     context_object_name = 'instances'

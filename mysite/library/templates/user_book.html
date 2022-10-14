@@ -5,14 +5,10 @@
 {% block content %}
 <h1>Mano paimta knyga:</h1>
 <hr>
-    <img src="{{ instance.book.cover.url }}">
-    <br>
-    <br>
-    <p><strong class="{% if instance.is_overdue %}text-danger{% endif %}">Pavadinimas: {{instance.book.title}} ({{ instance.due_back }}) </strong></p>
-    <p><strong >UUID: {{ instance.uuid }} </strong></p>
-    <p><strong >Statusas: {{ instance.get_status_display }} </strong></p>
-    {% if object.reader == user %}
-        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'update_instance' instance.id %}">Redaguoti</a>
-        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'delete_instance' instance.id %}">Ištrinti</a>
-    {% endif %}
+    <ul>
+        <img src="{{ instance.book.cover.url }}">
+        <br>
+        <br>
+        <p><strong class="{% if instance.is_overdue %}text-danger{% endif %}">Pavadinimas: {{instance.book.title}} (grąžinti iki: {{ instance.due_back }}) </strong></p>
+    </ul>
 {% endblock %}
