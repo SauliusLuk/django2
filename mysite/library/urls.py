@@ -12,4 +12,5 @@ urlpatterns = [
     path('profile/', views.profile, name="profile"),
     path('userbooks/', views.UserBookInstanceListView.as_view(), name='userbooks'),
     path('userbooks/<int:pk>', views.UserBookInstanceDetailView.as_view(), name='userbook'),
+    path('userbooks/new', views.UserBookInstanceCreateView.as_view(), name='new_instance'),
 ]

@@ -157,7 +157,7 @@ class UserBookInstanceListView(ListView, LoginRequiredMixin):
     model = BookInstance
     template_name = 'user_books.html'
     context_object_name = 'instances'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         return BookInstance.objects.filter(reader=self.request.user)
@@ -166,3 +166,16 @@ class UserBookInstanceDetailView(generic.DetailView, LoginRequiredMixin):
     model = BookInstance
     template_name = 'user_book.html'
     context_object_name = 'instance'
+
+class UserBookInstanceCreateView(generic.CreateView, LoginRequiredMixin):
+        model = BookInstance
+        fields = ['book', 'due_back']
+        success_url = '/library/userbooks/' # Patvirtinus forma, nukreipiama i url
+        template_name = 'userbook_form.html'
+        # form_class = UserBookInstanceCreateForm
+
+        def form_valid(self, form):
+            form.instance.reader = self.request.user # Nustatom reader ir pasiimam aktyvu useri
+            form.instance.status = 'p'
+            form.save()
+            return super().form_valid(form)
