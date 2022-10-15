@@ -1,16 +1,15 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from . forms import BookReviewForm, UserUpdateForm, ProfileUpdateForm
 from .models import Book, BookInstance, Author
-from django.views import generic
+from django.contrib import messages
+from django.contrib.auth.forms import User
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.contrib.auth.forms import User
+from django.shortcuts import redirect, render, get_object_or_404, reverse
+from django.views import generic
 from django.views.decorators.csrf import csrf_protect
-from django.contrib import messages
+from django.views.generic import ListView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
-from . forms import BookReviewForm, UserUpdateForm, ProfileUpdateForm
-from django.views.generic import ListView
 
 
 
@@ -179,3 +178,29 @@ class UserBookInstanceCreateView(generic.CreateView, LoginRequiredMixin):
             form.instance.status = 'p'
             form.save()
             return super().form_valid(form)
+
+class UserBookInstanceUpdateView(UpdateView, LoginRequiredMixin, UserPassesTestMixin):
+    model = BookInstance
+    fields = ['book', 'due_back']
+    # form_class = UserBookInstanceCreateForm
+    success_url = '/library/userbooks/'
+    template_name = 'userbook_form.html'
+
+    def form_valid(self, form):
+        form.instance.reader = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+    def test_func(self):
+        book_instance = self.get_object()
+        return book_instance.reader == self.request.user
+
+class UserBookInstanceDeleteView(DeleteView, LoginRequiredMixin, UserPassesTestMixin):
+    model = BookInstance
+    success_url = '/library/userbooks/'
+    template_name = 'userbook_delete.html'
+    context_object_name = 'instance'
+
+    def test_func(self):
+        book_instance = self.get_object()
+        return book_instance.reader == self.request.user
