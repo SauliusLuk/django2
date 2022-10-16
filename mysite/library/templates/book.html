@@ -1,53 +1,44 @@
 {% extends "base.html" %}
 
-{% block title %}Autorius{% endblock %}
+{% block title %}Knyga{% endblock %}
 
 {% block content %}
 {% load static %}
+{% load i18n %}
 {% if book.cover %}
-<img src="{{ book.cover.url }}" class="card-img-top" style="width:200px" alt="...">
+<img src="{{ book.cover.url }}" style="width:300px" class="card-img-top" alt="...">
 {% else %}
-<img src="{% static 'img/no-image.png' %}" class="card-img-top" style="width:200px" alt="...">
+<img src="{% static 'img/no-image.png' %}" style="width:300px" class="card-img-top">
 {% endif %}
-<h1>Knyga</h1>
-<p>Pavadinimas: <strong>{{ book.title }}</strong></p>
-<p>Autorius: <strong>{{ book.author }}</strong></p>
-<p>ISBN: <strong>{{ book.isbn }}</strong></p>
-<p>Zanras: <strong>{{ book.display_genre }}</strong></p>
-<p>Aprasymas: <strong>{{ book.summary }}</strong></p>
+<h1>Knyga:</h1>
+<p>Pavadinimas: <strong> {{ book.title }} </strong></p>
+<p>Autorius: <strong> {{ book.author }} </strong></p>
+<p>ISBN: <strong> {{ book.isbn }} </strong></p>
+<p>Žanras: <strong> {{ book.display_genre }} </strong></p>
+<p>Aprašymas: {{ book.summary }} </p>
 <h5>Knygos egzemplioriai:</h5>
 <ul>
     {% for instance in book.instances.all %}
-          <li><p class="{% if instance.status == 'g' %}text-success{% elif instance.status == 'p' %}text-danger{% else %}text-warning{% endif %}">
-    {{ instance.uuid }}, {{ instance.get_status_display }} ({{ instance.due_back }})</li>
+        <li class="{% if instance.status == 'g' %}text-success{% elif instance.status == 'p' %}text-danger{% else %}text-warning{% endif %}">{{ instance.uuid }}, {{ instance.get_status_display }} ({{ instance.due_back }})</li>
     {% endfor %}
 </ul>
-
-</br>
-  <h4>Atsiliepimai:</h4>
-
+<br>
+<h5>Atsiliepimai:</h5>
   {% if user.is_authenticated %}
-  <div class="fieldWrapper">
-    <hr><br/>
-    <h4>Palikite atsiliepimą:</h4>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.content }}
-        </br>
-      <input type="submit" value="Pateikti">
-    </form>
-  </div>
+    <div class="fieldWrapper">
+        <hr><br/>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.content }}
+            <input type="submit" value="Pateikti">
+        </form>
+    </div>
   {% endif %}
-
-
-  {% if book.reviews.all %}
-    {% for review in book.reviews.all %}
-      <hr>
-      <strong>{{ review.reviewer }}</strong>, <em>{{ review.date_created}}</em>
+{% if book.bookreview_set.all %}
+ {% for review in book.bookreview_set.all %}
+    <hr>
+    <strong>{{ review.reviewer }}</strong>, <em>{{ review.date_created }}</em>
       <p>{{ review.content }}</p>
     {% endfor %}
-  {% else %}
-    <p>Knyga neturi atsiliepimų</p>
-  {% endif %}
-
+{% endif %}
 {% endblock %}
