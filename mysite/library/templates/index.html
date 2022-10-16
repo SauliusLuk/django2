@@ -1,14 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Sveiki atvyke{% endblock %}
+
+{% block title %}Sveiki atvykę{% endblock %}
 
 {% block content %}
-<b>Local library</b>
-<p>We have the following books:</p>
+{% load i18n %}
+  <h1>{% trans "Local library" %}</h1>
+  <p>{% trans "Welcome to my Library" %}</p>
+  <p>{% trans "Today we have:" %}</p>
 <ul>
-    <li><strong>Books:</strong> {{ num_books }}</li>
-    <li><strong>Instances:</strong> {{ num_instances }}</li>
-    <li><strong>Instances available:</strong> {{ num_instances_available }}</li>
-    <li><strong>Authors:</strong> {{ num_authors }}</li>
+    <li><strong>{% trans "Books" %}:</strong> {{ num_book }}</li>
+    <li><strong>{% trans "Book Instances" %}:</strong> {{ num_instances }}</li>
+    <li><strong>{% trans "Now Available" %}:</strong> {{ num_instances_available }}</li>
+    <li><strong>{% trans "Authors" %}:</strong> {{ num_authors }}</li>
 </ul>
-<p>Čia jūs lankotes {{ num_visits }}-ą kartą.</p>
-{% endblock %}
+<p>{% trans "Your visits" %}: {{ num_visits }}</p>
+{% endblock content %}
